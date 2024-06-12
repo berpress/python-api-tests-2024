@@ -2,6 +2,9 @@ import pytest
 import requests
 from faker import Faker
 
+from fixtures.endpoints.register.api import Register
+from fixtures.endpoints.register.random import random_register
+
 URL = "http://localhost:56733"
 
 faker = Faker()
@@ -24,6 +27,17 @@ class TestRegister:
         # типы
         assert isinstance(response.json()['message'], str)
         assert isinstance(response.json()['uuid'], int)
+
+    def test_register_valid_data_2(self, url):
+        """
+        1. Try to register new user
+        2. Check that status code 201
+        3. Check response
+        """
+        register = Register(url=url)
+        body = random_register()
+        res = register.register_user(body=body)
+        assert res.status_code == 201
 
 
     @pytest.mark.skip(reason='1234')
